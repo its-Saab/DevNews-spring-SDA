@@ -1,19 +1,22 @@
 package se.sdaproject;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Articles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String title;
     private String body;
+
     private String authorName;
+
+    @OneToMany(mappedBy = "commentedArticle")
+    private List<ArticlesComments> articleCommentsList;
+
 
     public Articles(){}
 
@@ -23,11 +26,11 @@ public class Articles {
         this.authorName = authorName;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -53,5 +56,22 @@ public class Articles {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public void updateArticle(Articles updatedArticle){
+        this.title = updatedArticle.title;
+        this.authorName=updatedArticle.authorName;
+        this.body=updatedArticle.body;
+    }
+
+    public List<ArticlesComments> getArticleCommentsList() {
+        return articleCommentsList;
+    }
+
+    public List<ArticlesComments> findByAuthor(String authorName){
+        return getArticleCommentsList().
+    }
+    public void setArticleCommentsList(List<ArticlesComments> articleCommentsList) {
+        this.articleCommentsList = articleCommentsList;
     }
 }

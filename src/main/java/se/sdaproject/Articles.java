@@ -1,8 +1,13 @@
 package se.sdaproject;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Articles {
@@ -17,6 +22,10 @@ public class Articles {
     @OneToMany(mappedBy = "commentedArticle")
     private List<ArticlesComments> articleCommentsList;
 
+    @ManyToMany(mappedBy = "articlesList")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
+    @JsonIdentityReference(alwaysAsId = true)
+    private Set<Topics> topicsList;
 
     public Articles(){}
 
@@ -32,6 +41,14 @@ public class Articles {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Set<Topics> getTopicsList() {
+        return topicsList;
+    }
+
+    public void setTopicsList(Set<Topics> topicsList) {
+        this.topicsList = topicsList;
     }
 
     public String getTitle() {

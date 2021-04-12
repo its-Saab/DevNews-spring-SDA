@@ -68,9 +68,7 @@ public class Articles {
         return articleCommentsList;
     }
 
-    public List<ArticlesComments> findByAuthor(String authorName){
-        return getArticleCommentsList().
-    }
+
     public void setArticleCommentsList(List<ArticlesComments> articleCommentsList) {
         this.articleCommentsList = articleCommentsList;
     }

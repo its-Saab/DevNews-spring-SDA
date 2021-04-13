@@ -64,15 +64,15 @@ public class ArticlesController {
     }
     //Get all topics associated with an article:
     @GetMapping("/articles/{articleId}/topics")
-    public Set<Topics> getAllTopicsAssociatedWithArticle(@PathVariable Long articleId){
+    public ResponseEntity<Set<Topics>> getAllTopicsAssociatedWithArticle(@PathVariable Long articleId){
         Articles articles = articlesRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-       return articles.getTopicsList();
+       return ResponseEntity.ok(articles.getTopicsList());
     }
     //Post a topic to an article, if the topic doesnt exist it creates it and save it
     @PostMapping("/articles/{articleId}/topics")
     public ResponseEntity<Topics> associatesTopicWithArticle(@PathVariable Long articleId, @RequestBody Topics topicParam){
         Articles article = articlesRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-        Boolean doesExist = true;
+        boolean doesExist = true;
         if(topicsRepository.findById(topicParam.getId()).isEmpty()){
             topicsRepository.save(topicParam);
             doesExist=false;

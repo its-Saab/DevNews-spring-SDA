@@ -34,18 +34,21 @@ public class ArticlesCommentsController {
 
     }
 
+    //Get article's comments list
     @GetMapping("/articles/{articleId}/comments")
     public List<ArticlesComments> getArticlesCommentsList(@PathVariable Long articleId){
       Articles article = articlesRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
       return article.getArticleCommentsList();
     }
 
+    //Delete a comment using Id
     @DeleteMapping("/comments/{id}")
     public String deleteCommentById(@PathVariable Long id){
         articlesCommentsRepository.deleteById(id);
         return "Comment deleted successfully";
     }
 
+    //Update a comment using Id
     @PutMapping("/comments/{id}")
     public ResponseEntity<ArticlesComments> updateComment(@PathVariable Long id,@Validated @RequestBody ArticlesComments commentParams){
         ArticlesComments existingComment = articlesCommentsRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
@@ -54,7 +57,7 @@ public class ArticlesCommentsController {
         return ResponseEntity.ok(commentParams);
     }
 
-
+    //Get all comments made by an author
     @GetMapping(value = "/comments", params = {"authorName"})
     public ResponseEntity<List<ArticlesComments>> viewAllCommentsByAuthor(@RequestParam String authorName) {
         return ResponseEntity.ok(articlesCommentsRepository.findByAuthorName(authorName));

@@ -32,15 +32,15 @@ public class TopicsController {
 
     //Get All topics
     @GetMapping("/topics")
-    public List<Topics> getAllTopics(){
-        return topicsRepository.findAll();
+    public ResponseEntity<List<Topics>> getAllTopics(){
+        return ResponseEntity.ok(topicsRepository.findAll());
     }
 
     //Retrieve all articles associated with a topic
     @GetMapping("/topics/{topicId}/articles")
-    public Set<Articles> getAllArticlesAssociatedWithTopic(@PathVariable Long topicId){
+    public ResponseEntity<Set<Articles>> getAllArticlesAssociatedWithTopic(@PathVariable Long topicId){
       Topics topic = topicsRepository.findById(topicId).orElseThrow(ResourceNotFoundException::new);
-      return topic.getArticlesList();
+      return ResponseEntity.ok(topic.getArticlesList());
     }
 
     //Update a topic

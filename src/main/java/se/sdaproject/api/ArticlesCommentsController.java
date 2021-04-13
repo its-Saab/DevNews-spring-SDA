@@ -36,16 +36,16 @@ public class ArticlesCommentsController {
 
     //Get article's comments list
     @GetMapping("/articles/{articleId}/comments")
-    public List<ArticlesComments> getArticlesCommentsList(@PathVariable Long articleId){
+    public ResponseEntity<List<ArticlesComments>> getArticlesCommentsList(@PathVariable Long articleId){
       Articles article = articlesRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-      return article.getArticleCommentsList();
+      return ResponseEntity.ok(article.getArticleCommentsList());
     }
 
     //Delete a comment using Id
     @DeleteMapping("/comments/{id}")
-    public String deleteCommentById(@PathVariable Long id){
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCommentById(@PathVariable Long id){
         articlesCommentsRepository.deleteById(id);
-        return "Comment deleted successfully";
     }
 
     //Update a comment using Id

@@ -1,9 +1,14 @@
-package se.sdaproject;
+package se.sdaproject.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.sdaproject.exceptions.ResourceNotFoundException;
+import se.sdaproject.model.Articles;
+import se.sdaproject.model.Topics;
+import se.sdaproject.repository.ArticlesRepository;
+import se.sdaproject.repository.TopicsRepository;
 
 import java.util.List;
 import java.util.Set;
@@ -34,14 +39,14 @@ public class TopicsController {
     //Retrieve all articles associated with a topic
     @GetMapping("/topics/{topicId}/articles")
     public Set<Articles> getAllArticlesAssociatedWithTopic(@PathVariable Long topicId){
-      Topics topic = topicsRepository.findById(topicId).orElseThrow(ItemNotFoundException::new);
+      Topics topic = topicsRepository.findById(topicId).orElseThrow(ResourceNotFoundException::new);
       return topic.getArticlesList();
     }
 
     //Update a topic
     @PutMapping("/topics/{topicId}")
     public ResponseEntity<Topics> updateTopic(@PathVariable Long topicId, @RequestBody Topics topicParam){
-        Topics existingTopic = topicsRepository.findById(topicId).orElseThrow(ItemNotFoundException::new);
+        Topics existingTopic = topicsRepository.findById(topicId).orElseThrow(ResourceNotFoundException::new);
         topicParam.setId(existingTopic.getId());
         topicsRepository.save(topicParam);
         return ResponseEntity.ok(topicParam);
@@ -51,7 +56,7 @@ public class TopicsController {
     @DeleteMapping("/topics/{topicId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTopic(@PathVariable Long topicId) {
-        Topics topic = topicsRepository.findById(topicId).orElseThrow(ItemNotFoundException::new);
+        Topics topic = topicsRepository.findById(topicId).orElseThrow(ResourceNotFoundException::new);
         topicsRepository.delete(topic);
     }
 

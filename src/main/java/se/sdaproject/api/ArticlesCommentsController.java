@@ -1,10 +1,15 @@
-package se.sdaproject;
+package se.sdaproject.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import se.sdaproject.exceptions.ResourceNotFoundException;
+import se.sdaproject.model.Articles;
+import se.sdaproject.model.ArticlesComments;
+import se.sdaproject.repository.ArticlesCommentsRepository;
+import se.sdaproject.repository.ArticlesRepository;
 
 import java.util.List;
 
@@ -21,8 +26,8 @@ public class ArticlesCommentsController {
 
     //Create a new comment:
     @PostMapping("/articles/{articleId}/comments")
-    public ResponseEntity<ArticlesComments> createComment(@PathVariable Long articleId,@Validated @RequestBody ArticlesComments articlesComments){
-        Articles article = articlesRepository.findById(articleId).orElseThrow(ItemNotFoundException::new);
+    public ResponseEntity<ArticlesComments> createComment(@PathVariable Long articleId, @Validated @RequestBody ArticlesComments articlesComments){
+        Articles article = articlesRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
         articlesComments.setCommentedArticle(article);
         articlesCommentsRepository.save(articlesComments);
         return ResponseEntity.status(HttpStatus.CREATED).body(articlesComments);
@@ -31,7 +36,7 @@ public class ArticlesCommentsController {
 
     @GetMapping("/articles/{articleId}/comments")
     public List<ArticlesComments> getArticlesCommentsList(@PathVariable Long articleId){
-      Articles article = articlesRepository.findById(articleId).orElseThrow(ItemNotFoundException::new);
+      Articles article = articlesRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
       return article.getArticleCommentsList();
     }
 
@@ -43,7 +48,7 @@ public class ArticlesCommentsController {
 
     @PutMapping("/comments/{id}")
     public ResponseEntity<ArticlesComments> updateComment(@PathVariable Long id,@Validated @RequestBody ArticlesComments commentParams){
-        ArticlesComments existingComment = articlesCommentsRepository.findById(id).orElseThrow(ItemNotFoundException::new);
+        ArticlesComments existingComment = articlesCommentsRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         commentParams.setId(id);
         articlesCommentsRepository.save(commentParams);
         return ResponseEntity.ok(commentParams);

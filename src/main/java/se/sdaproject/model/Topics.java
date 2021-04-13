@@ -1,9 +1,10 @@
-package se.sdaproject;
+package se.sdaproject.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import se.sdaproject.model.Articles;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -24,9 +25,7 @@ public class Topics {
 
     public Topics(){}
 
-    public Topics(String name){
-     this.name = name;
-    }
+
     public Long getId() {
         return id;
     }
